@@ -8,6 +8,15 @@ async function pickFriuts(path) {
     .pipe(parse({ headers: true }))
     .on('error', error => console.error(error))
     .on('data', row => {
+      let numberOfFuture = 0;
+      let sumOfFruitsSize = 0;
+      for (key in row) {
+        if (key.toString().startsWith('Future')) {
+          numberOfFuture++;
+          sumOfFruitsSize += parseFloat(row[key]);
+        }
+      }
+      row['AvgFruitSize'] = parseFloat(sumOfFruitsSize/numberOfFuture).toString();
       if (row['Future2'] > 70) pickingFruits['Future2'].push(row);
       else if (row['Future5'] >= 70) pickingFruits['Future5'].push(row);
       else pickingFruits['Future8'].push(row);
